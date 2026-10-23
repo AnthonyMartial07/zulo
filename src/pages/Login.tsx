@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 /**
- * Login sin contraseña: Supabase manda un código por email y se escribe aquí.
- * (Más cómodo que el enlace: da igual en qué navegador se abra el correo.)
- * La plantilla de email de Supabase tiene que incluir {{ .Token }}.
+ * Login sin contraseña: Supabase manda un email con un código (si la plantilla incluye
+ * {{ .Token }}) o con un enlace (plantilla por defecto). Sirven las dos cosas.
  */
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -17,7 +16,11 @@ export default function Login() {
     e?.preventDefault()
     setError(null)
     setBusy(true)
-    const { error } = await supabase.auth.signInWithOtp({ email: email.trim() })
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      // Por si el correo trae el enlace en vez del código (plantilla por defecto de Supabase)
+      options: { emailRedirectTo: window.location.origin },
+    })
     setBusy(false)
     if (error) setError(error.message)
     else setStep('code')
@@ -56,7 +59,7 @@ export default function Login() {
       ) : (
         <form onSubmit={verify}>
           <p className="muted">
-            Te hemos mandado un código a <b>{email}</b>
+            Te hemos mandado un correo a <b>{email}</b>. Escribe el código o pulsa el enlace que trae.
           </p>
           <input
             className="otp"
