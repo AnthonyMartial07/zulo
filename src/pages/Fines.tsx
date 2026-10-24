@@ -5,7 +5,7 @@ import type { Fine, FineType } from '../lib/types'
 import LeagueTable from '../components/LeagueTable'
 import { mondayOf } from '../lib/rotation'
 
-const euros = (n: number) => `${Number(n).toFixed(2)} €`
+const euros = (n: number) => `${Number(n).toFixed(2).replace('.', ',')} €`
 
 export default function Fines() {
   const { me, members, memberById } = useHousehold()

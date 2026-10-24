@@ -63,7 +63,7 @@ export default function Calendar() {
           return (
             <div key={week} className={`card week ${isCurrent ? 'current' : ''}`}>
               <h3 className="row">
-                Semana del {monday.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                Semana del {monday.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', timeZone: 'UTC' })}
                 {isCurrent && <span className="live-dot" title="Esta semana" />}
               </h3>
               <PlayerCard member={person} />
